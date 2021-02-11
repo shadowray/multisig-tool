@@ -25,17 +25,17 @@ jobs:
             - ~/.cache
           key: v1-dependencies-{{ checksum "package.json" }}
 
-      - run: yarn lint
+      - run: yarn lint:eslint
 
       - run: yarn size
 
-      - run: yarn test
+      - run: yarn test:staged
 
       - run: yarn build
 
       - aws-s3/sync:
           from: build
-          to: "s3://kriss-react-cicd/"
+          to: "s3://multisig-tool/"
           arguments: |
             --acl public-read \
             --cache-control "max-age=86400"
