@@ -9,7 +9,7 @@ import getConfig from "./config";
 
 const nearConfig = getConfig(process.env.NODE_ENV || "development");
 
-export const init = async () => {
+export const init = async (): Promise<void> => {
   const connectionBody = {
     ...{ deps: { keyStore: new keyStores.BrowserLocalStorageKeyStore() } },
     ...nearConfig,
@@ -29,21 +29,28 @@ export const init = async () => {
   );
 };
 
-export const logout = () => {
+export const logout = (): void => {
   window.walletConnection.signOut();
   window.location.replace(window.location.origin + window.location.pathname);
 };
 
-export const login = () => {
+export const login = (): void => {
   window.walletConnection.requestSignIn(nearConfig.contractName);
 };
 
-const getAccounts = () => {
+const getAccounts = (): string[] => {
   const accountIds = localStorage.getItem("accounts");
   return accountIds ? accountIds.split(",") : [];
 };
 
-export const loadAccounts = async () => {
+interface IAccounts {
+  accountId: string;
+  amount: string;
+}
+
+type TAccounts = IAccounts | undefined;
+
+export const loadAccounts = async (): Promise<TAccounts[]> => {
   const accountIds = getAccounts();
 
   const accounts = await Promise.all(
@@ -59,7 +66,7 @@ export const loadAccounts = async () => {
           };
         }
       } catch (error) {
-        console.log(error);
+        return error;
       }
 
       return result;
@@ -73,7 +80,7 @@ const setAccounts = (accountIds: string[]): void => {
   window.localStorage.setItem("accounts", accountIds.join(","));
 };
 
-export const addAccount = async (accountId: string) => {
+export const addAccount = async (accountId: string): Promise<void> => {
   const accountIds = getAccounts();
 
   if (!accountIds.includes(accountId)) {
