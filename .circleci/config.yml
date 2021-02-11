@@ -1,0 +1,39 @@
+version: 2.1
+orbs:
+  aws-s3: circleci/aws-s3@1.0.11
+jobs:
+  build:
+    docker:
+      - image: 'circleci/node:fermium'
+        working_directory: ~/repo
+        steps:
+          - checkout
+          - restore_cache:
+              keys:
+                - 'v1-dependencies-{{ checksum "package.json" }}'
+                - v1-dependencies-
+          - run: yarn install
+          - save_cache:
+              paths:
+                - node_modules
+                - ~/.npm
+                - ~/.cache
+              key: 'v1-dependencies-{{ checksum "package.json" }}'
+          - run: 'yarn lint:eslint'
+          - run: 'yarn test:staged'
+          - run: yarn build
+          - aws-s3/sync:
+              from: build
+              to: 's3://multisig-tool/'
+              arguments: |
+                --acl public-read \
+                --cache-control "max-age=86400"
+              overwrite: true
+  workflows:
+    workflow:
+      jobs:
+        - build:
+            filters:
+              branches:
+                only:
+                  - multisig
