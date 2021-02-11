@@ -39,7 +39,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build",
+    "build": "react-scripts --max_old_space_size=3072 build",
     "test:watch": "react-scripts test --watchAll --silent",
     "test:changed": "react-scripts test --silent -o",
     "test:coverage": "react-scripts test --coverage --watchAll=false",
