@@ -26,12 +26,12 @@ jobs:
       - run:
           name: Installation of project dependencies
           command: yarn
+      - run: yarn build
 
       - run: yarn lint:eslint
 
       - run: yarn test:staged
 
-      - run: yarn build
 
       - aws-s3/sync:
           from: build
