@@ -23,6 +23,10 @@ jobs:
             - ~/.cache/yarn
             - node_modules
 
+      - run:
+          name: Installation of project dependencies
+          command: yarn
+
       - run: yarn lint:eslint
 
       - run: yarn test:staged
