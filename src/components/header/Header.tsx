@@ -16,7 +16,7 @@ const HeaderComponent: FC = (): ReactElement => {
           <Button type="primary" onClick={login}>
             Log in with NEAR wallet
           </Button>
-          <Title>CI/CD check ++</Title>
+          <Title>CI/CD check +++</Title>
         </>
       )}
       {isLoggedIn && (
