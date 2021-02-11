@@ -27,8 +27,6 @@ jobs:
 
       - run: yarn lint:eslint
 
-      - run: yarn size
-
       - run: yarn test:staged
 
       - run: yarn build
